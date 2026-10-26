@@ -1,0 +1,74 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "devices": {
+      "$deviceId": {
+        ".read": true,
+        "raw": {
+          ".write": "$deviceId.matches(/^[A-Za-z0-9_-]{1,24}$/)",
+          ".validate": "newData.hasChildren(['seq', 's0', 'n', 'b']) && newData.child('n').val() >= 1 && newData.child('n').val() <= 400",
+          "seq":  { ".validate": "newData.isNumber()" },
+          "s0":   { ".validate": "newData.isNumber()" },
+          "n":    { ".validate": "newData.isNumber()" },
+          "b":    { ".validate": "newData.isString() && newData.val().length <= 3300" },
+          "rssi": { ".validate": "newData.isNumber()" },
+          "up":   { ".validate": "newData.isNumber()" },
+          "g":    { ".validate": "newData.isNumber()" },
+          "fw":   { ".validate": "newData.isString() && newData.val().length <= 24" },
+          "$other": { ".validate": false }
+        },
+        "info": {
+          ".write": "$deviceId.matches(/^[A-Za-z0-9_-]{1,24}$/)",
+          ".validate": "newData.hasChildren(['fw'])",
+          "fw":   { ".validate": "newData.isString() && newData.val().length <= 24" },
+          "ip":   { ".validate": "newData.isString() && newData.val().length <= 45" },
+          "ssid": { ".validate": "newData.isString() && newData.val().length <= 40" },
+          "rate": { ".validate": "newData.isNumber()" },
+          "ch":   { ".validate": "newData.isNumber()" },
+          "$other": { ".validate": false }
+        },
+        "$other": { ".validate": false }
+      }
+    },
+
+    "models": {
+      "$deviceId": {
+        ".read": true,
+        ".write": "$deviceId.matches(/^[A-Za-z0-9_-]{1,24}$/)",
+        ".validate": "newData.hasChildren(['json', 'updated'])",
+        "json":    { ".validate": "newData.isString() && newData.val().length <= 120000" },
+        "updated": { ".validate": "newData.isNumber()" },
+        "demo":    { ".validate": "newData.isBoolean()" },
+        "n":       { ".validate": "newData.isNumber()" },
+        "$other":  { ".validate": false }
+      }
+    },
+
+    "sessions": {
+      "$deviceId": {
+        ".read": true,
+        "$sid": {
+          ".write": "$deviceId.matches(/^[A-Za-z0-9_-]{1,24}$/) && !data.exists() && newData.exists()",
+          ".validate": "newData.hasChildren(['ts', 'game', 'score', 'summary'])",
+          "ts":      { ".validate": "newData.isNumber()" },
+          "game":    { ".validate": "newData.isString() && newData.val().length <= 32" },
+          "score":   { ".validate": "newData.isNumber()" },
+          "summary": { ".validate": "newData.isString() && newData.val().length <= 8200" },
+          "$other":  { ".validate": false }
+        }
+      }
+    },
+
+    "sim": {
+      "$deviceId": {
+        "label": {
+          ".read": true,
+          ".write": "$deviceId.matches(/^[A-Za-z0-9_-]{1,24}$/)",
+          ".validate": "newData.isString() && newData.val().length <= 12"
+        }
+      }
+    }
+  }
+}
